@@ -1,8 +1,10 @@
 module Balladina
-  class Secretary
+  class TrackCoordinator
     include Celluloid
     include Celluloid::Logger
     include Celluloid::Notifications
+
+    finalizer :remove_track_from_board
 
     def initialize(control_socket, track, board)
       @track          = track
@@ -20,7 +22,7 @@ module Balladina
     def on_message(message)
       case message["command"]
       when "start_recording", "stop_recording"
-        track.public_send message["command"]
+        track.async.public_send message["command"]
       when "broadcast_ready"
         board.async.notify_ready track
       end
@@ -28,6 +30,10 @@ module Balladina
 
     def notify_peers(msg, peer_ids)
       control_socket << { command: msg, data: peer_ids }.to_json
+    end
+
+    def remove_track_from_board
+      board.async.remove_track track
     end
   end
 end

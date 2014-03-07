@@ -13,13 +13,25 @@ module Balladina
     private     :tracks, :ready_ids
 
     def add_track(track_id, control_socket, data_socket, track_class = Track)
-      supervised_track = track_class.supervise(track_id, data_socket)
-      @tracks          = (tracks << supervised_track)
+      track   = track_class.new(track_id, data_socket)
+      @tracks = (tracks << track)
 
-      create_secretary control_socket, supervised_track.actors.first
+      create_track_coordinator control_socket, track
       broadcast_online
 
-      supervised_track.actors.first
+      track
+    end
+
+    def remove_track(track)
+      @tracks    = Hamster.set(*tracks.to_a.delete_if { |t|
+                                 t.id == track.id
+                              })
+      @ready_ids = ready_ids.delete(track.id)
+
+      broadcast_online
+      broadcast_ready
+
+      track.terminate
     end
 
     def notify_ready(track)
@@ -32,12 +44,12 @@ module Balladina
     end
 
     def broadcast_online
-      publish "peers_online", tracks.map { |t| t.actors.first.id }.to_a
+      publish "peers_online", tracks.map(&:id).to_a
     end
 
     private
-    def create_secretary(control_socket, track)
-      Secretary.supervise control_socket, track, Actor.current
+    def create_track_coordinator(control_socket, track)
+      TrackCoordinator.new(control_socket, track, Actor.current)
     end
   end
 end

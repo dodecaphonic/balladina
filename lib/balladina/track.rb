@@ -4,12 +4,13 @@ module Balladina
 
     trap_exit :recorder_died
 
-    def initialize(socket)
+    def initialize(id, socket)
+      @id     = id
       @socket = socket
       @chunks = []
     end
 
-    attr_reader :chunks, :socket
+    attr_reader :chunks, :socket, :id
     private     :socket
 
     def start_recording

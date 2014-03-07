@@ -19,10 +19,6 @@ module Balladina
       @tracks              = (@tracks << supervised_track)
       supervised_secretary = create_secretary(control_socket,
                                               supervised_track.actors.first)
-
-      info "Telling Secretary of Track\##{track_id} to listen..."
-      supervised_secretary.actors.first.async.listen
-
       supervised_track.actors.first
     end
 
@@ -39,50 +35,14 @@ module Balladina
       supervised_secretary = Secretary.supervise(control_socket,
                                                  track,
                                                  Actor.current)
-      @track_secretaries   = @track_secretaries.put(track.id, track)
+      @track_secretaries   = @track_secretaries.put(track.id,
+                                                    supervised_secretary.actors.first)
 
       supervised_secretary
     end
 
     def new_track_id
       @next_track_id += 1
-    end
-  end
-
-  class Secretary
-    include Celluloid
-    include Celluloid::Logger
-
-    def initialize(control_socket, track, board)
-      @control_socket = control_socket
-      @track          = track
-      @board          = board
-    end
-
-    attr_reader :track, :control_socket, :board
-    private     :track, :control_socket, :board
-
-    def listen
-      loop do
-        begin
-          raw_data = control_socket.read
-          message  = JSON.parse(raw_data)
-
-          case message["command"]
-          when "start_recording", "stop_recording"
-            track.public_send message["command"]
-          when "broadcast_ready"
-            board.async.broadcast_ready track
-          end
-        rescue JSON::ParserError
-          error "Control Socket (Track \##{track.id}): message was not understood -> #{raw_data}"
-        end
-      end
-    end
-
-    def broadcast_ready_peers(ready_peer_ids)
-      info "Sending PEERS_READY to control_socket"
-      control_socket << { command: "peers_ready", peers: ready_peer_ids }.to_json
     end
   end
 end

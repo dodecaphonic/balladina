@@ -1,0 +1,18 @@
+*, html {
+    margin: 0 auto;
+    padding: 0;
+}
+
+#mosaic {
+    float: left;
+    width: 75%;
+    height: 100%;
+    background-color: green;
+}
+
+#tracks {
+    float: left;
+    width: 25%;
+    height: 100%;
+    background-color: yellow;
+}

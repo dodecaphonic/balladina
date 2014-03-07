@@ -29,7 +29,7 @@ module Balladina
         socket_type = message["command"].sub("promote_to_", "").to_sym
 
         if (pending = pending_clients[client_id])
-          create_track socket_type, socket, pending
+          create_track client_id, socket_type, socket, pending
           @pending_clients = pending_clients.delete(client_id)
         else
           pending = PendingClient.new(socket_type, socket)
@@ -40,7 +40,7 @@ module Balladina
       end
     end
 
-    def create_track(current_socket_type, current_socket, pending)
+    def create_track(client_id, current_socket_type, current_socket, pending)
       control_socket, data_socket = if current_socket_type == :control
                                       [current_socket, pending.socket]
                                     else
@@ -49,7 +49,7 @@ module Balladina
 
       info "Adding client to board with control and data sockets"
 
-      board.actors.first.async.add_track control_socket, data_socket
+      board.actors.first.async.add_track client_id, control_socket, data_socket
     end
   end
 end

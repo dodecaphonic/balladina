@@ -4,7 +4,7 @@ describe Balladina::Track, actor_system: :global do
   let(:socket) { double("socket") }
 
   before do
-    @track = Balladina::Track.new(socket)
+    @track = Balladina::Track.new("test-track", socket)
   end
 
   after do

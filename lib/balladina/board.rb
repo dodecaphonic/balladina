@@ -2,47 +2,42 @@ module Balladina
   class Board
     include Celluloid
     include Celluloid::Logger
+    include Celluloid::Notifications
 
     def initialize
-      @tracks            = Hamster.set
-      @track_secretaries = Hamster.hash
-      @ready_ids         = Hamster.set
-      @next_track_id     = 0
+      @tracks    = Hamster.set
+      @ready_ids = Hamster.set
     end
 
-    attr_reader :tracks, :track_secretaries
-    private     :tracks, :track_secretaries
+    attr_reader :tracks, :ready_ids
+    private     :tracks, :ready_ids
 
-    def add_track(control_socket, data_socket, track_class = Track)
-      track_id             = new_track_id
-      supervised_track     = track_class.supervise(track_id, data_socket)
-      @tracks              = (@tracks << supervised_track)
-      supervised_secretary = create_secretary(control_socket,
-                                              supervised_track.actors.first)
+    def add_track(track_id, control_socket, data_socket, track_class = Track)
+      supervised_track = track_class.supervise(track_id, data_socket)
+      @tracks          = (tracks << supervised_track)
+
+      create_secretary control_socket, supervised_track.actors.first
+      broadcast_online
+
       supervised_track.actors.first
     end
 
-    def broadcast_ready(track)
-      @ready_ids = @ready_ids << track.id
+    def notify_ready(track)
+      @ready_ids = ready_ids << track.id
+      broadcast_ready
+    end
 
-      track_secretaries
-        .select { |t_id, _| t_id != track.id }
-        .each   { |_, s| s.async.broadcast_ready_peers(@ready_ids.to_a) }
+    def broadcast_ready
+      publish "peers_ready", ready_ids.to_a
+    end
+
+    def broadcast_online
+      publish "peers_online", tracks.map { |t| t.actors.first.id }.to_a
     end
 
     private
     def create_secretary(control_socket, track)
-      supervised_secretary = Secretary.supervise(control_socket,
-                                                 track,
-                                                 Actor.current)
-      @track_secretaries   = @track_secretaries.put(track.id,
-                                                    supervised_secretary.actors.first)
-
-      supervised_secretary
-    end
-
-    def new_track_id
-      @next_track_id += 1
+      Secretary.supervise control_socket, track, Actor.current
     end
   end
 end

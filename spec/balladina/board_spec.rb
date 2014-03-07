@@ -14,8 +14,8 @@ describe Balladina::Board, actor_system: :global do
 
   describe "adding a track" do
     it do
-      track = @board.add_track(control_socket, data_socket, StubTrack)
-      expect(track.id).to be(1)
+      track = @board.add_track("test-track", control_socket, data_socket, StubTrack)
+      expect(track.id).to eq("test-track")
     end
   end
 
@@ -29,10 +29,11 @@ describe Balladina::Board, actor_system: :global do
         end
       end
 
-      @board.add_track(control_socket, data_socket, StubTrack)
-      @board.add_track(control_socket1, data_socket, StubTrack)
+      @board.add_track("track-1", control_socket, data_socket, StubTrack)
+      @board.add_track("track-2", control_socket1, data_socket, StubTrack)
 
       control_socket.read = %q|{ "command": "broadcast_ready" }|
+      sleep 0.05
       expect(control_socket1.commands).not_to be_empty
     end
   end
@@ -43,15 +44,17 @@ describe Balladina::Board, actor_system: :global do
     end
 
     it "starts recording" do
-      track = @board.add_track(control_socket, data_socket, StubTrack)
+      track = @board.add_track("track_1", control_socket, data_socket, StubTrack)
+      sleep 0.2
       expect(track).to be_recording
     end
 
     it "stops recording" do
-      track = @board.add_track(control_socket, data_socket, StubTrack)
+      track = @board.add_track("track_2", control_socket, data_socket, StubTrack)
       expect(track).to be_recording
 
       control_socket.read = %q|{ "command": "stop_recording" }|
+      sleep 0.2
       expect(track).not_to be_recording
     end
   end

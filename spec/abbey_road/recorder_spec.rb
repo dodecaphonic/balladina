@@ -9,7 +9,7 @@ describe AbbeyRoad::Recorder, actor_system: :global do
   end
 
   after do
-    @recorder.terminate
+    @recorder.terminate if @recorder.alive?
   end
 
   describe "when receiving data" do

@@ -1,6 +1,7 @@
 require "celluloid"
 require "json"
 require "hamster"
+require "logger"
 
 require_relative "abbey_road/recorder"
 require_relative "abbey_road/track"

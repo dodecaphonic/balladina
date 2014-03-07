@@ -27,7 +27,7 @@ module Balladina
     end
 
     def notify_peers(msg, peer_ids)
-      control_socket << { command: msg, peers: peer_ids }.to_json
+      control_socket << { command: msg, data: peer_ids }.to_json
     end
   end
 end

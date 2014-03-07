@@ -10,9 +10,18 @@
     background-color: green;
 }
 
-#tracks {
+#controls {
     float: left;
     width: 25%;
     height: 100%;
-    background-color: yellow;
+    overflow-y: scroll;
+}
+
+#controls .track {
+    height: 100px;
+    border-bottom: solid 1px black;
+}
+
+#controls .track > * {
+    margin: 5px 5px;
 }

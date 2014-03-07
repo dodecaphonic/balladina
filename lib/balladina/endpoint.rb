@@ -25,7 +25,7 @@ module Balladina
       loop do
         raw_data    = socket.read
         message     = JSON.parse(raw_data)
-        client_id   = message["clientId"]
+        client_id   = message["data"]
         socket_type = message["command"].sub("promote_to_", "").to_sym
 
         if (pending = pending_clients[client_id])

@@ -1,11 +1,11 @@
 require_relative "../spec_helper"
 
-describe AbbeyRoad::Recorder, actor_system: :global do
+describe Balladina::Recorder, actor_system: :global do
   let(:socket) { double("socket") }
   let(:track)  { double("track") }
 
   before do
-    @recorder = AbbeyRoad::Recorder.new(track, socket)
+    @recorder = Balladina::Recorder.new(track, socket)
   end
 
   after do

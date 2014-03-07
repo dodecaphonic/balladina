@@ -1,6 +1,6 @@
 require "celluloid/rspec"
 
-require_relative "../lib/abbey_road"
+require_relative "../lib/balladina"
 
 Celluloid.logger = Logger.new(File.expand_path("../log/test.log", __dir__))
 

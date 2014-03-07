@@ -1,11 +1,11 @@
 require_relative "../spec_helper"
 
-describe AbbeyRoad::Board, actor_system: :global do
-  let(:control_socket) { OpenStruct.new(read: "") }
+describe Balladina::Board, actor_system: :global do
+  let(:control_socket) { OpenStruct.new(read: "", commands: []) }
   let(:data_socket) { double("data_socket") }
 
   before do
-    @board = AbbeyRoad::Board.new
+    @board = Balladina::Board.new
   end
 
   after do
@@ -20,13 +20,12 @@ describe AbbeyRoad::Board, actor_system: :global do
   end
 
   describe "mediating" do
-    let(:control_socket1) { OpenStruct.new(read: "", write: []) }
+    let(:control_socket1) { OpenStruct.new(read: "", commands: []) }
 
     it "informs other Peers that a particular Peer is ready" do
       class << control_socket1
         def <<(command)
-          p "=== GOT COMMAND #{command}"
-          (self.commands ||= []) << command
+          self.commands << command
         end
       end
 

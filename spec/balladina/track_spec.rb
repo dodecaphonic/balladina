@@ -1,10 +1,10 @@
 require "spec_helper"
 
-describe AbbeyRoad::Track, actor_system: :global do
+describe Balladina::Track, actor_system: :global do
   let(:socket) { double("socket") }
 
   before do
-    @track = AbbeyRoad::Track.new(socket)
+    @track = Balladina::Track.new(socket)
   end
 
   after do

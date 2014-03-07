@@ -1,4 +1,4 @@
-module AbbeyRoad
+module Balladina
   class Track
     include Celluloid
 

@@ -1,4 +1,4 @@
-module AbbeyRoad
+module Balladina
   class Board
     include Celluloid
     include Celluloid::Logger
@@ -65,7 +65,9 @@ module AbbeyRoad
     def listen
       loop do
         begin
-          message = JSON.parse(control_socket.read)
+          raw_data = control_socket.read
+          message  = JSON.parse(raw_data)
+
           case message["command"]
           when "start_recording", "stop_recording"
             track.public_send message["command"]
@@ -73,13 +75,14 @@ module AbbeyRoad
             board.async.broadcast_ready track
           end
         rescue JSON::ParserError
-          error "Control Socket (Track \##{track.id}): message was not understood"
+          error "Control Socket (Track \##{track.id}): message was not understood -> #{raw_data}"
         end
       end
     end
 
     def broadcast_ready_peers(ready_peer_ids)
-      control_socket << { command: "peers_ready", peers: ready_peer_ids }
+      info "Sending PEERS_READY to control_socket"
+      control_socket << { command: "peers_ready", peers: ready_peer_ids }.to_json
     end
   end
 end

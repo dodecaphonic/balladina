@@ -1,0 +1,8 @@
+language: ruby
+rvm:
+  - 2.0.0
+  - 2.1.1
+  - jruby-20mode
+  - rbx-2.2.2
+env:
+  - JRUBY_OPTS="--2.0"

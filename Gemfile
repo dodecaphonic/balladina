@@ -10,5 +10,6 @@ gem "foreman"
 gem "pry"
 
 group :test do
+  gem "coveralls", require: false
   gem "rspec"
 end

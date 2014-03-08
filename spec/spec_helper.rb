@@ -1,4 +1,8 @@
+require "rspec"
 require "celluloid/rspec"
+require "coveralls"
+
+Coveralls.wear!
 
 require_relative "../lib/balladina"
 

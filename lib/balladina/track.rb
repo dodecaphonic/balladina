@@ -4,17 +4,18 @@ module Balladina
 
     trap_exit :recorder_died
 
-    def initialize(id, socket)
+    def initialize(id, socket, options = {})
       @id     = id
       @socket = socket
       @chunks = []
+      @creates_recorders = options.fetch(:creates_recorders) { Recorder}
     end
 
-    attr_reader :chunks, :socket, :id
-    private     :socket
+    attr_reader :chunks, :socket, :id, :creates_recorders
+    private     :socket, :creates_recorders
 
     def start_recording
-      @recorder = Recorder.new_link(Actor.current, socket)
+      @recorder = creates_recorders.new_link(Actor.current, socket)
       @recorder.async.record
     end
 

@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
+require "reel"
+
 require_relative "../lib/balladina"
-require "celluloid/autostart"
+require_relative "../lib/balladina/endpoint"
 
 Balladina::Endpoint.run

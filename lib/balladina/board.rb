@@ -4,16 +4,18 @@ module Balladina
     include Celluloid::Logger
     include Celluloid::Notifications
 
-    def initialize
-      @tracks    = Hamster.set
-      @ready_ids = Hamster.set
+    def initialize(options = {})
+      @creates_tracks       = options.fetch(:creates_tracks) { Track }
+      @creates_coordinators = options.fetch(:creates_coordinators) { TrackCoordinator }
+      @tracks         = Hamster.set
+      @ready_ids      = Hamster.set
     end
 
-    attr_reader :tracks, :ready_ids
-    private     :tracks, :ready_ids
+    attr_reader :tracks, :ready_ids, :creates_tracks, :creates_coordinators
+    private     :tracks, :ready_ids, :creates_tracks, :creates_coordinators
 
-    def add_track(track_id, control_socket, data_socket, track_class = Track)
-      track   = track_class.new(track_id, data_socket)
+    def add_track(track_id, control_socket, data_socket)
+      track   = creates_tracks.new(track_id, data_socket)
       @tracks = (tracks << track)
 
       create_track_coordinator control_socket, track
@@ -49,7 +51,7 @@ module Balladina
 
     private
     def create_track_coordinator(control_socket, track)
-      TrackCoordinator.new(control_socket, track, Actor.current)
+      creates_coordinators.new(control_socket, track, Actor.current)
     end
   end
 end

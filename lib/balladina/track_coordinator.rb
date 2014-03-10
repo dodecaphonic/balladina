@@ -9,10 +9,10 @@ module Balladina
     def initialize(control_socket, track, board)
       @track          = track
       @board          = board
-      @listener       = ControlSocketListener.new_link(Actor.current, control_socket)
+      @listener       = ControlSocketListener.new_link(track.id, Actor.current, control_socket)
       @control_socket = control_socket
 
-      subscribe "peers_ready", :notify_peers
+      subscribe "peers_ready",  :notify_peers
       subscribe "peers_online", :notify_peers
     end
 

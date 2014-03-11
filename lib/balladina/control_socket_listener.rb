@@ -5,6 +5,7 @@ module Balladina
     def initialize(secretary, control_socket)
       @secretary      = secretary
       @control_socket = control_socket
+
       async.listen
     end
 

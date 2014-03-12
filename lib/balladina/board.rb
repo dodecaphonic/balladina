@@ -49,6 +49,14 @@ module Balladina
       publish "peers_online", tracks.map(&:id).to_a
     end
 
+    def start_recording
+      publish "start_recording"
+    end
+
+    def stop_recording
+      publish "stop_recording"
+    end
+
     private
     def create_track_coordinator(control_socket, track)
       creates_coordinators.new(control_socket, track, Actor.current)

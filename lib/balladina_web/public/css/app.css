@@ -10,18 +10,18 @@
     background-color: green;
 }
 
-#controls {
+#panel {
     float: left;
     width: 25%;
     height: 100%;
     overflow-y: scroll;
 }
 
-#controls .track {
+#peers .track {
     height: 100px;
     border-bottom: solid 1px black;
 }
 
-#controls .track > * {
+#peers .track > * {
     margin: 5px 5px;
 }

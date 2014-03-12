@@ -6,10 +6,12 @@ module Balladina
 
     finalizer :remove_track_from_board
 
-    def initialize(control_socket, track, board)
-      @track          = track
-      @board          = board
-      @listener       = ControlSocketListener.new_link(Actor.current, control_socket)
+    def initialize(control_socket, track, board, options = {})
+      @track    = track
+      @board    = board
+      @listener = options.fetch(:creates_socket_listeners) {
+        ControlSocketListener
+      }.new_link(Actor.current, control_socket)
       @control_socket = control_socket
 
       subscribe "peers_ready",  :notify_peers
@@ -22,7 +24,6 @@ module Balladina
     private     :track, :board, :control_socket
 
     def on_message(message)
-      info message
       case message["command"]
       when "start_recording", "stop_recording"
         board.async.public_send message["command"]
@@ -42,6 +43,7 @@ module Balladina
       track.async.public_send msg
     end
 
+    private
     def remove_track_from_board
       board.async.remove_track track
     end

@@ -2,19 +2,19 @@ module Balladina
   class ControlSocketListener
     include Celluloid
 
-    def initialize(secretary, control_socket)
-      @secretary      = secretary
+    def initialize(coordinator, control_socket)
+      @coordinator    = coordinator
       @control_socket = control_socket
 
       async.listen
     end
 
-    attr_reader :secretary, :control_socket
-    private     :secretary, :control_socket
+    attr_reader :coordinator, :control_socket
+    private     :coordinator, :control_socket
 
     def listen
       loop do
-        secretary.async.on_message next_message
+        coordinator.async.on_message next_message
       end
     ensure
       terminate

@@ -7,14 +7,22 @@
     float: left;
     width: 75%;
     height: 100%;
-    background-color: green;
+    border-right: solid 1px #ccc;
+}
+
+#remote-view video {
+    width: 320px;
 }
 
 #panel {
     float: left;
-    width: 25%;
+    width: 24%;
     height: 100%;
     overflow-y: scroll;
+}
+
+#panel video {
+    width: 100%;
 }
 
 #peers .track {

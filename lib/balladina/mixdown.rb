@@ -2,10 +2,16 @@ module Balladina
   class Mixdown
     def initialize(name, options = {})
       @name        = name
-      @target_path = options.fetch(:target_path) { Configuration.mixdowns_path }
+      @target_path = options.fetch(:target_path) {
+        Configuration.instance.mixdowns_path
+      }
     end
 
     attr_reader :name, :target_path
+
+    def self.create_for(board_name, with_tracks: {})
+      self.new(board_name).perform_on with_tracks
+    end
 
     def perform_on(tracks_clips)
       create_temp_mixdown_path
@@ -23,7 +29,7 @@ module Balladina
 
     def join_clips(track_name, clips)
       track_path = File.join(temp_mixdown_path, "#{track_name}.wav")
-      clip_paths = clips.join(" ")
+      clip_paths = clips.to_a.join(" ")
 
       `sox #{clip_paths} #{track_path}`
 

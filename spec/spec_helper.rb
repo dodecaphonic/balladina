@@ -30,6 +30,19 @@ class GossipFiend
 
   attr_reader :online, :ready
 
+  def listen_to(channel_name)
+    instance_variable_set "@#{channel_name}", []
+    self.class.send :define_method, channel_name.to_sym do |value|
+      instance_variable_get("@#{channel_name}") << value
+    end
+
+    subscribe channel_name, channel_name.to_sym
+  end
+
+  def [](channel_name)
+    instance_variable_get "@#{channel_name}"
+  end
+
   def peers_online(msg, content)
     @online = content
   end

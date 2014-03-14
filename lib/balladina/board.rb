@@ -5,14 +5,16 @@ module Balladina
     include Celluloid::Notifications
 
     def initialize(options = {})
+      @name                 = SecureRandom.hex
       @creates_tracks       = options.fetch(:creates_tracks) { Track }
       @creates_coordinators = options.fetch(:creates_coordinators) { TrackCoordinator }
-      @tracks         = Hamster.set
-      @ready_ids      = Hamster.set
+      @tracks    = Hamster.set
+      @ready_ids = Hamster.set
+      @engineer  = Engineer.new_link(Actor.current)
     end
 
-    attr_reader :tracks, :ready_ids, :creates_tracks, :creates_coordinators
-    private     :tracks, :ready_ids, :creates_tracks, :creates_coordinators
+    attr_reader :tracks, :ready_ids, :creates_tracks, :creates_coordinators, :engineer, :name
+    private     :tracks, :ready_ids, :creates_tracks, :creates_coordinators, :engineer
 
     def add_track(track_id, control_socket, data_socket)
       track   = creates_tracks.new(track_id, data_socket)
@@ -55,6 +57,15 @@ module Balladina
 
     def stop_recording
       publish "stop_recording"
+    end
+
+    def mixdown
+      mixdown_ready_tracks = tracks.map { |t| t.future.prepare_mixdown }
+      engineer.mixdown mixdown_ready_tracks
+    end
+
+    def mixdown_ready(public_path)
+      publish "download_mixdown", File.basename(public_path)
     end
 
     private

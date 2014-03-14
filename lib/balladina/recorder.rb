@@ -7,8 +7,10 @@ module Balladina
       @track  = track
       @socket = socket
       writes_chunks = options.fetch(:writes_chunks) { ChunkWriter }
-      @writer = writes_chunks.supervise(track,
-                                        Dir.tmpdir + "/balladina/#{track.id}")
+      chunks_path   = options.fetch(:chunks_path) {
+        Configuration.instance.chunks_path
+      }
+      @writer = writes_chunks.supervise(track, File.join(chunks_path,String(track.id)))
     end
 
     attr_reader :socket, :track, :writer

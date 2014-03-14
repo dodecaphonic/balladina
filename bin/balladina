@@ -6,4 +6,5 @@ require "reel"
 require_relative "../lib/balladina"
 require_relative "../lib/balladina/endpoint"
 
+Balladina::Configuration.load File.expand_path("../config/application.yml", __dir__)
 Balladina::Endpoint.run

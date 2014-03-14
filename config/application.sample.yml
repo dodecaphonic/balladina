@@ -1,0 +1,4 @@
+---
+chunks_path: /tmp
+mixdowns_path: /tmp/mixdowns
+public_mixdowns_path: /var/www/balladina/public/mixdowns

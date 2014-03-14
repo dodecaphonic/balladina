@@ -18,6 +18,7 @@ module Balladina
       subscribe "peers_online", :notify_peers
       subscribe "start_recording", :control_recording
       subscribe "stop_recording",  :control_recording
+      subscribe "download_mixdown", :download_mixdown
     end
 
     attr_reader :track, :board, :control_socket
@@ -31,6 +32,8 @@ module Balladina
         board.async.notify_ready track
       when "promote_leader"
         board.async.promote_leader message["data"]
+      when "mixdown"
+        board.async.mixdown
       end
     end
 
@@ -41,6 +44,11 @@ module Balladina
     def control_recording(msg)
       control_socket << { command: msg }.to_json
       track.async.public_send msg
+    end
+
+    def download_mixdown(msg, public_path)
+      info "==== DOWNLOAD MY MIX #{public_path}"
+      control_socket << { command: msg, data: public_path }.to_json
     end
 
     private

@@ -80,9 +80,12 @@ body {
     cursor: pointer;
 }
 
+#controls .icon {
+    line-height: 1.3em;
+}
+
 #controls .toggle-recording .icon {
     color: #ff3a31;
-    line-height: 1.3em;
 }
 
 #controls .toggle-recording.recording {

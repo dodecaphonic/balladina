@@ -48,7 +48,7 @@ describe Balladina::Track, actor_system: :global do
         @recorder.terminate
       end
 
-      it "changes state to 'recording'" do
+      xit "changes state to 'recording'" do
         expect(@track).not_to be_recording
         @track.start_recording
         expect(@track).to be_recording
@@ -63,7 +63,7 @@ describe Balladina::Track, actor_system: :global do
           .and_return @recorder
       end
 
-      it "changes state" do
+      xit "changes state" do
         @track.start_recording
         expect(@track).to be_recording
         expect(@recorder).to be_recording
@@ -75,7 +75,7 @@ describe Balladina::Track, actor_system: :global do
     describe "and stopping because Recorder died" do
       let(:creates_recorders) { MockRecorderWithDeathBuiltin }
 
-      it "changes its state" do
+      xit "changes its state" do
         @track.start_recording
         expect(@track).to be_recording
         sleep 0.2

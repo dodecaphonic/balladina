@@ -6,7 +6,8 @@ describe Balladina::Recorder, actor_system: :global do
 
   before do
     @recorder = Balladina::Recorder.new(track, socket,
-                                        writes_chunks: MockWriter)
+                                        writes_chunks: MockWriter,
+                                        chunks_path: Dir.tmpdir)
   end
 
   after do

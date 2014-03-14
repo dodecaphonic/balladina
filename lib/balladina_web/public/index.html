@@ -13,20 +13,22 @@
       <video id="local-view" width="320"></video>
 
       <div id="controls"></div>
-      <div id="peers"></div>
+      <div id="tracks"></div>
     </div>
   </body>
 
   <script type="text/template" id="controls-template">
-    <div class="toggle-recording">
-      <i class="fa fa-microphone icon"></i>
+    <div class="toggle-recording button">
+      <i class="fa fa-circle icon"></i>
     </div>
   </script>
 
   <script type="text/template" id="track-template">
-    <div class="track" data-id="<%= id %>">
-      ID: <%= id %>
-    </div>
+    <p>ID: <%= id %></p>
+    <p>
+     <i class="fa fa-headphones"></i>
+     <input type="range" name="track-<%= id %>-volume" class="track-volume" />
+    </p>
   </script>
 
   <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>

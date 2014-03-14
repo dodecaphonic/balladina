@@ -33,3 +33,30 @@
 #peers .track > * {
     margin: 5px 5px;
 }
+
+#controls {
+    border-bottom: solid 1px #ccc;
+}
+
+#controls > * {
+    margin: 10px 10px;
+}
+
+#controls .toggle-recording {
+    font-size: 4em;
+    border: solid 1px black;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    float: left;
+    text-align: center;
+    cursor: pointer;
+}
+
+#controls .toggle-recording .icon {
+    line-height: 1.3em;
+}
+
+#controls .toggle-recording.recording {
+    color: green;
+}

@@ -1,43 +1,8 @@
 <html>
   <head>
     <title>Tout allors</title>
+    <link rel="stylesheet" media="screen" href="/css/font-awesome.min.css"/>
     <link rel="stylesheet" media="screen" href="/css/app.css"/>
-    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="/js/react-0.9.0.js"></script>
-    <script type="text/javascript" src="/js/JSXTransformer-0.9.0.js"></script>
-    <script type="text/javascript" src="http://simplewebrtc.com/latest.js"></script>
-    <script type="text/javascript" src="/js/recorderjs/recorder.js"></script>
-    <script type="text/javascript" src="/js/app.js"></script>
-
-    <script type="text/jsx">
-      /**
-       * @jsx React.DOM
-       */
-      var TrackList = React.createClass({
-        render: function() {
-          var trackNodes = this.props.peers.map(function (peerId) {
-            return <Track peerId={peerId}/>;
-          });
-
-          return (
-            <div id="tracks">
-              {trackNodes}
-            </div>
-          );
-        }
-      });
-
-      var Track = React.createClass({
-        render: function() {
-          return (
-            <div className="track">
-              <p>ID: {this.props.peerId}</p>
-              <input type="range" name="volume" />
-            </div>
-          );
-        }
-      });
-    </script>
   </head>
 
   <body>
@@ -45,13 +10,29 @@
       <div id="remote-view"></div>
     </div>
     <div id="panel">
-      <div id="controls">
-        <video id="local-view" width="320"></video>
+      <video id="local-view" width="320"></video>
 
-        <button id="start-recording">Start</button>
-        <button id="stop-recording">Stop</button>
-      </div>
+      <div id="controls"></div>
       <div id="peers"></div>
     </div>
   </body>
+
+  <script type="text/template" id="controls-template">
+    <div class="toggle-recording">
+      <i class="fa fa-microphone icon"></i>
+    </div>
+  </script>
+
+  <script type="text/template" id="track-template">
+    <div class="track" data-id="<%= id %>">
+      ID: <%= id %>
+    </div>
+  </script>
+
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="http://simplewebrtc.com/latest.js"></script>
+  <script type="text/javascript" src="/js/recorderjs/recorder.js"></script>
+  <script type="text/javascript" src="/js/underscore-min.js"></script>
+  <script type="text/javascript" src="/js/backbone-min.js"></script>
+  <script type="text/javascript" src="/js/app.js"></script>
 </html>

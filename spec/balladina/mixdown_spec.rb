@@ -24,10 +24,19 @@ describe Balladina::Mixdown do
 
   it "joins a set of Tracks into a zipfile" do
     zipped_path = subject.perform_on("track-1" => clips, "track-2" => clips)
-    expect(File.size(zipped_path)).to eq(File.size(mixdown))
+    expect(contents_of(zipped_path)).to eq(contents_of(mixdown, :mixdown))
   end
 
-  def digest(path)
-    Digest::MD5.file path
+  def contents_of(zipfile, type = :reference)
+    dest = destination_of(zipfile, type)
+    FileUtils.mkdir_p dest
+    `unzip #{zipfile} -d #{dest}`
+    Dir["dest/**/*"]
+  ensure
+    FileUtils.rm_rf destination_of(zipfile, type)
+  end
+
+  def destination_of(zipfile, type)
+    File.join(tmp_mixdowns, "unzipping-#{type}")
   end
 end

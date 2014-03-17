@@ -60,6 +60,7 @@ describe Balladina::TrackCoordinator, actor_system: :global do
     end
 
     xit do
+      pending "figure out how to write this and get what I mean"
       @coordinator.control_recording "start_recording"
     end
   end

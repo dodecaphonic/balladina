@@ -12,18 +12,43 @@ body {
     font-weight: 300;
 }
 
+#header-bar {
+    background-color: #910025;
+    background-image: url("../images/logo.png");
+    background-repeat: no-repeat;
+    border-left: 16px solid 910025;
+    border-top: 10px solid 910025;
+    float: left;
+    width: 100%;
+    height: 50px;
+}
+
 #mosaic {
+    margin-top: 20px;
     float: left;
     width: 75%;
     height: 100%;
 }
 
+#super-canvas-fx {
+    position: absolute;
+    width: 320px;
+    height: 240px;
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    transform: scale(-1, 1);
+    filter: FlipH;
+}
+
 #remote-view video {
     width: 320px;
+    height: 240px;
 }
 
 #panel {
     float: left;
+    margin-top: 64px;
     width: 24%;
     height: 100%;
 }
